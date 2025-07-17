@@ -98,4 +98,23 @@ class ImageController extends Controller
         // Return a success response
         return response()->json(['message' => 'Image deleted successfully']);
     }
+
+    public function bulkDelete(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'ids.*' => 'integer|exists:images,id',
+        ]);
+
+        $images = Image::whereIn('id', $request->ids)->get();
+
+        foreach ($images as $image) {
+            if (Storage::disk('public')->exists($image->image_path)) {
+                Storage::disk('public')->delete($image->image_path);
+            }
+            $image->delete();
+        }
+
+        return response()->json(['message' => 'Selected images deleted successfully.']);
+    }
 }

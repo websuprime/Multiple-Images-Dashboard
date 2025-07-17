@@ -3,10 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageController;
 
-// Route for the homepage
-
 Route::get('/', [ImageController::class, 'index'])->name('home');
-
 
 Route::prefix('admin')->group(function () {
     // Image Routes
@@ -16,7 +13,6 @@ Route::prefix('admin')->group(function () {
     Route::get('images/{id}/edit', [ImageController::class, 'edit'])->name('images.edit');
     Route::put('images/{id}', [ImageController::class, 'update'])->name('images.update');
     Route::get('images/{id}/preview', [ImageController::class, 'preview'])->name('images.preview');
-
-    // Delete image route
     Route::delete('images/{id}', [ImageController::class, 'destroy'])->name('images.destroy');
+    Route::post('images/bulk-delete', [ImageController::class, 'bulkDelete'])->name('images.bulkDelete');
 });
